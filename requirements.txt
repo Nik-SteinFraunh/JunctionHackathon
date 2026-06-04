@@ -1,0 +1,26 @@
+# QEC Pipeline — requirements
+# Pinned to versions verified working together in the converter test session
+# (Stim -> Qiskit conversion, Aer simulation, PyMatching decoding).
+ 
+# --- Core: circuit generation, simulation, decoding (TESTED together) ---
+qiskit==2.4.1
+qiskit-aer==0.17.2
+stim==1.16.0
+pymatching==2.4.0
+numpy==2.4.4
+iqm-qubit-selector
+ 
+# --- Hardware execution on IQM Garnet via IQM Resonance ---
+# Provides `from iqm.qiskit_iqm import IQMProvider`.
+# Latest release; NOT exercised in the simulation test environment.
+iqm-client==34.0.3
+ 
+# --- Notes ---
+# * The simulation/decoding stack above was verified end-to-end:
+#     stim_to_qiskit() -> Aer stabilizer sim -> Stim m2d -> PyMatching.
+# * iqm-client is required only for the live hardware path
+#   (run_hardware_experiment / full_hardware_pipeline). If you only run
+#   simulation + converter tests, it is not needed.
+# * If iqm-client pulls a qiskit version conflicting with 2.4.1, relax the
+#   qiskit pin to the range iqm-client requires and re-run verify_converter.py
+#   to confirm the converter still passes against that qiskit build.
