@@ -5,7 +5,7 @@ from iqm.qubit_selector.qiskit_utils import get_circuit, CircuitType
 from iqm.qiskit_iqm import IQMProvider
 
 # Input your Resonance token
-token = "FwTF2r7HEKYTzxgzmXle+pvuE5PKQuntkg+ZhRtip88BnoNFTw59EaF77lGtmFBX" # Replace with your actual token
+token = "" # Replace with your actual token
 os.environ["IQM_TOKEN"] = token
 
 iqm_server_url = "https://resonance.meetiqm.com"  # Replace with your IQM server URL

@@ -14,7 +14,8 @@ import numpy as np
 
 
 def get_qubit_lists(circuit: stim.Circuit) -> tuple[list, list]:
-    """Returns (data_qubit_stim_indices, ancilla_qubit_stim_indices).
+    """
+    For Stim circuits: Returns (data_qubit_stim_indices, ancilla_qubit_stim_indices).
 
     NOTE: PLEASE DOUBLE CHECK FUNCTIONALITY! 
 
@@ -24,32 +25,30 @@ def get_qubit_lists(circuit: stim.Circuit) -> tuple[list, list]:
         data qubits   → both x and y coordinates are odd
         ancilla qubits → at least one coordinate is even
 
-    Falls back to MR-vs-M detection for circuits without coordinate annotations.
     """
     coords = circuit.get_final_qubit_coordinates()
 
-    if coords:
-        # Collect all measured qubit indices
-        all_measured: set[int] = set()
-        for instr in circuit.flattened():
-            if instr.name in ("M", "MR"):
-                for t in instr.targets_copy():
-                    if t.is_qubit_target:
-                        all_measured.add(t.value)
+    # Collect all measured qubit indices
+    all_measured: set[int] = set()
+    for instr in circuit.flattened():
+        if instr.name in ("M", "MR"):
+            for t in instr.targets_copy():
+                if t.is_qubit_target:
+                    all_measured.add(t.value)
 
-        data_q, anc_q = [], []
-        for q in sorted(all_measured):
-            if q in coords:
-                x, y = coords[q]
-                # data qubits sit at odd-x, odd-y grid positions
-                if int(x) % 2 == 1 and int(y) % 2 == 1:
-                    data_q.append(q)
-                else:
-                    anc_q.append(q)
-            else:
-                # No coordinates — conservative: treat as data
+    data_q, anc_q = [], []
+    for q in sorted(all_measured):
+        if q in coords:
+            x, y = coords[q]
+            # data qubits sit at odd-x, odd-y grid positions
+            if int(x) % 2 == 1 and int(y) % 2 == 1:
                 data_q.append(q)
-        return data_q, anc_q
+            else:
+                anc_q.append(q)
+        else:
+            # No coordinates — conservative: treat as data
+            data_q.append(q)
+    return data_q, anc_q
 
 
     return data_q, anc_q

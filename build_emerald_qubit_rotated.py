@@ -19,8 +19,7 @@ def build_emerald_qubit_map(
     """
     Maps Stim dense qubit indices (0..16) to Qiskit qubit indices for IQM Emerald.
 
-    NOTE: You can build this functionality. BUT, the qiskit transpiler automatically optimizes for least number of swap gates. So chances are, it will already fit a created circuit
-    on the correct qubit patch. Hand-testing at your own discretion. 
+    NOTE: OPTIONAL, since the qiskit transpiler automatically optimizes for least number of swap gates. Still, hand-testing is recommended.
 
     Default parameters target this 5x5 sub-region of the Emerald chip (OR ANY OTHER!)
 
@@ -79,6 +78,9 @@ def print_qubit_map(
     qiskit_offset: int = -1,
 ):
     """
+    NOTE: If you are using qiskit, the mapping is easily compared by hand, since the expected Qiskit and Resonance qubit indices are the same (except for a -1 difference).
+
+
     Prints a human-readable table of the Stim → Emerald qubit mapping
     and flags any CX pairs that require SWAPs (non-adjacent physical qubits).
     Use this to verify the mapping before submitting to hardware.
