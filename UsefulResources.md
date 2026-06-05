@@ -9,6 +9,17 @@ Take a look at the Connecting To Resonance tutorial in the challenge's Github re
 * ``blogposts/``: blogposts describing how surface code work in general
 * ```GarnetRepetitionsCode``: A notebook example to run repetion codes on Garnet.
 
+**Suggested reading order for iqm_utils:**
+
+Here we give you an idea of what error correction codes look like.
+
+Suggested reading order: 
+
+* ``GarnetRepetitionCode.ipynb`` notebook - Surface code defintion, Repetition code definition, understanding the full pipeline for repetition codes
+* ``blogposts01-planar`` - deeper understanding on how surface codes are set up, when stabilizers fire, 
+* ``blogpost02.ipynb``- how the decoding problem arises (recommended, but not vital for building the pipeline if you trust your tooling)
+
+Or whatever resources you find online ;)
 
 If you have any problems, IQM mentors are here to help! Visit our table or reach out to us on the hackathon Discord!
 

@@ -4,7 +4,9 @@
 
 Quantum computers are fundamentally noise-limited: every gate, every idle moment, every measurement introduces errors that accumulate faster than useful computation can proceed. 
 Quantum error correction addresses this by encoding a single logical qubit across many physical qubits and continuously measuring stabilizer operators — parity checks that reveal error syndromes without collapsing the encoded information. 
-Surface codes have emerged as the leading practical approach, and they map directly onto the square-lattice connectivity that superconducting processors like IQM Emerald provide.
+Surface codes have emerged as the leading practical approach.
+A surface code is defined, via the number of physical qubits it needs, the distance it covers, and the number of logical qubits. $$
+They map directly onto the square-lattice connectivity that superconducting processors like IQM Emerald provide.
 Still, writing out a whole a whole pipeline is notoriously hard. 
 The challenge you will be facing today will have you operating on the forefront of science! 
 
@@ -32,11 +34,10 @@ In real hardware, you would then feed the information on logical errors back int
 
 ## Judging criteria
 
-1) Theoretical correctness. Does the experiment actually set up a surface correctly? Is the pipeline fully functional? (40%)
-2) Sophistication of the implementation. Have you optimized your circuits for the performance/architecture of the quantum computer? Can you prove a low number of SWAPS? (20%)
+1) Theoretical correctness. Does the experiment actually set up a surface correctly? Is the pipeline fully functional? (30%)
+2) Sophistication of the implementation. Have you optimized your circuits for the performance/architecture of the quantum computer? Can you prove a low number of SWAPS? (30%)
 3) Logical error rate statistics. (20%)
 4) Flexibility of the experiment and integration of advanced functionalities - Circuit compilation techniques, Noise Model improvements, Pulse-level compilations,... (20%)
-
 
 
 Bonus points will be awarded (at our discretion) for:
@@ -81,7 +82,7 @@ Three helper functions support the pipeline, mostly for stim to qiskit and postp
 * `get_meas_order` returns qubit indices in the order they are measured to align hardware bitstrings with Stim's measurement record. 
 * `counts_to_measurement_array` does the Qiskit-to-numpy conversion including the endianness correction. 
 
-Note the docstrings flag that you should verify this logic carefully — it is worth checking against a known small circuit before trusting it at scale.
+Note the docstrings reminding you, that you should verify this logic carefully before fully trusting it.
 
 ---
 
@@ -95,6 +96,7 @@ Concretely, you need a function that accepts:
 
 * a code distance
 * a number of stabilizer rounds, 
+* which memory experiment we are looking at (Z or X)
 * optionally a noise model, and returns a `stim.Circuit` or a `qiskit.QuantumCircuit`. 
 
 One decision worth thinking about: Most surface codes default to mid-circuit resets on ancilla qubits after a measurement (`MR`), so each round starts with a fresh ancilla and each raw measurement directly gives that round's syndrome. An alternative is to omit the reset: the ancilla then accumulates across rounds, and each raw measurement is the ``XOR`` of all syndromes up to that point. The detector definitions are identical in both cases, but the no-reset version avoids the reset error, leaving the ancilla live and decohering between rounds. Both are viable — the no-reset path is particularly relevant on hardware where resets introduce errors.
@@ -132,7 +134,7 @@ For a more substantial extension, the **NVIDIA Ising Predecoder** offers a hardw
 
 ### Different hardware patches and code distances
 
-The pipeline as set up targets a distance-3 rotated surface code (17 qubits) on a single 5×5 region of Emerald. Several natural extensions exist: running the same code on different 5×5 sub-regions of the chip and comparing logical error rates across regions reveals spatial variation in hardware quality. Trying distance-5 (49 qubits) would require a larger patch but fits on Emerald's full qubit count. Running multiple rounds of stabilizer measurement rather than just one round (the current hardware setting) moves the experiment toward fault-tolerant operation rather than a single-round snapshot, and gives the decoder temporal correlations to exploit.
+The pipeline as set up targets a distance-3 rotated surface code (17 qubits) on a single 5×5 region of Emerald. Several natural extensions exist: running the same code on different 5×5 sub-regions of the chip and comparing logical error rates across regions reveals spatial variation in hardware quality. Trying distance-5 (49 qubits) would require a larger patch but fits on Emerald's full qubit count. Trying the distance-3 code on Garnet also gives you an idea on how a different QPU behaves. 
 
 
 # Useful Resources
