@@ -11,4 +11,5 @@ dependencies = [
     "qiskit==2.4.1",
     "qiskit-aer==0.17.2",
     "stim==1.16.0",
+    "torch>=2.0",
 ]
