@@ -1,4 +1,4 @@
-from surface_code import * 
+from surface_code import *
 from build_emerald_qubit_rotated import *
 from extract_syndromes import *
 
@@ -84,26 +84,38 @@ def run_hardware_experiment(
 
 
 def decode_hardware_results(
-    syndromes: dict
-) -> tuple[float, float]:
+    syndromes: dict,
+    decoder: str = "mwpm",
+    model_path: str | None = None,
+    syndrome_shape: tuple | None = None,
+    L: int | None = None,
+) -> tuple[list, list]:
     """
     Decodes the output of extract_syndromes() via your desired decoder.
 
-    NOTE: Other parameters can be important for this function, such as a noise model. 
-
-
     Parameters
     ----------
-    syndromes           : dict  output of extract_syndromes()
+    syndromes      : dict  output of extract_syndromes()
+    decoder        : "mwpm" (default) or "diffqec"
+    model_path     : path to DiffQEC checkpoint (required if decoder="diffqec")
+    syndrome_shape : (rounds, D) expected by DiffQEC model
+    L              : number of logical observables for DiffQEC
 
     Returns
     -------
-    ler : float   estimated logical error rate
-    err : float   OPTIONAL 1-sigma statistical error
+    ler : list[float]  — per-observable logical error rate
+    err : list[float]  — 1-sigma statistical error per observable
     """
+    if decoder == "diffqec":
+        from diffqec.integrate import decode_hardware_results_diffqec
+        return decode_hardware_results_diffqec(
+            syndromes,
+            model_path=model_path,
+            syndrome_shape=syndrome_shape,
+            L=L,
+        )
 
-    # USE e.g. PyMatching to decode
-
-    ler,err = [], []
+    # Default / placeholder: MWPM or empty
+    ler, err = [], []
     return ler, err
 

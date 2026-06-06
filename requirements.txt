@@ -14,4 +14,7 @@ iqm-qubit-selector
 # Provides `from iqm.qiskit_iqm import IQMProvider`.
 # Latest release; NOT exercised in the simulation test environment.
 iqm-client==34.0.3
- 
+
+# --- DiffQEC decoder (discrete diffusion model) ---
+torch>=2.0
+  
